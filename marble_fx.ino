@@ -154,9 +154,11 @@ MyTimer heartbeat;
 bool lefthanded = false;
 /* global variables */
 uint8_t xtrabutton = 0;
-bool buttons[3] = { false, false, false };
-// lucky us, the definitions of MOUSE_LEFT,_RIGHT,_MIDDLE are also 1,2,4...
-uint8_t bmask[3] = { 0x01, 0x02, 0x04 };
+// bool buttons[3] = { false, false, false };
+// // lucky us, the definitions of MOUSE_LEFT,_RIGHT,_MIDDLE are also 1,2,4...
+// uint8_t bmask[3] = { 0x01, 0x02, 0x04 };
+bool buttons[5] = { false, false, false, false, false };
+uint8_t bmask[5] = { 0x01, 0x02, 0x04, 0x08, 0x10 };
 int8_t scroll_sum = 0;
 
 bool stream_mode = true;
@@ -506,11 +508,16 @@ uint8_t map_buttons(uint8_t mstat, uint8_t xtra)
 {
   uint8_t ret = 0;
   if (! lefthanded) {
-    ret = mstat & 0x07; /* standard left/right/middle buttons */
-    if (xtra & 0x20)
-      ret |= 0x04;
-    if (xtra & 0x10)
-      ret |= 0x10; /* scroll button */
+    // ret = mstat & 0x07; /* standard left/right/middle buttons */
+    // if (xtra & 0x20)
+    //   ret |= 0x04;
+    // if (xtra & 0x10)
+    //   ret |= 0x10; /* scroll button */
+
+    ret = mstat & 0x03; /* standard left/right buttons */
+    if (xtra & 0x10) {
+      ret |= 0x08;  // btn_side
+    }
   } else { /* invert */
     if (mstat & 0x01)
       ret = 0x02;
